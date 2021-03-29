@@ -16,8 +16,8 @@ function love.load()
 	yOffset = 0;--Measured in cells, not pixels
 	waitTime = 0.25;
 	--Touchscreen System
-	xInitialOffset = 0;
-	yInitialOffset = 0;
+	xTouchDistance = 0;
+	yTouchDistance = 0;
 	initialCellSize = cellSize;
 	initialDistance = 0;
 	canChangeLife = false;
@@ -245,8 +245,18 @@ function love.touchmoved(id,x,y,dx,dy)
 				end
 				lineWidth = math.ceil(cellSize/20);
 			elseif numTouches == 1 then
-				xOffset = xInitialOffset - math.floor(dx);
-				yOffset = yInitialOffset - math.floor(dy);
+				xTouchDistance = xTouchDistance + dx;
+				yTouchDistance = yTouchDistance + dy;
+				while math.abs(xTouchDistance) > cellSize do
+					local sign = math.abs(xTouchDistance)/xTouchDistance;
+					xOffset = xOffset - sign;
+					xTouchDistance = sign*(math.abs(xTouchDistance) - cellSize);
+				end
+				while math.abs(yTouchDistance) > cellSize do
+					local sign = math.abs(yTouchDistance)/yTouchDistance;
+					yOffset = yOffset - sign;
+					yTouchDistance = sign*(math.abs(yTouchDistance) - cellSize);
+				end
 			end
 		end
 	end
@@ -277,17 +287,14 @@ function love.touchpressed(id,x,y)
 		evilInput = nil;
 		mode = "info";
 	else
-		if y > guiHeight then
-			xInitialOffset = xOffset;
-			yInitialOffset = yOffset;
+		if y >= guiHeight then
+			canChangeLife = true;
+			xTouchDistance = 0;
+			yTouchDistance = 0;
 			initialCellSize = cellSize;
 			local numTouches = table.getn(love.touch.getTouches());
-			if numTouches == 1 and y >= guiHeight then
-				canChangeLife = true;
-			else
-				canChangeLife = false;
-			end
 			if numTouches == 2 then
+				canChangeLife = false;
 				local xdist = nil;
 				local ydist = nil;
 				for i,id in ipairs(love.touch.getTouches()) do
