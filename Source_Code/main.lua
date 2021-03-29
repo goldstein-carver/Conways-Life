@@ -126,10 +126,26 @@ function love.draw()
 		if oldmode == "paused" then
 			love.graphics.printf("Stop simulation to change!", 0, 0.9*maxy, maxx, "center");
 		end
-		love.graphics.print("p: " .. tostring(setNumbers.p), 0, math.floor(0.8*maxy));
-		love.graphics.print("q: " .. tostring(setNumbers.q), math.floor(0.25*maxx), math.floor(0.8*maxy));
-		love.graphics.print("r: " .. tostring(setNumbers.r), math.floor(0.5*maxx), math.floor(0.8*maxy));
-		love.graphics.print("s: " .. tostring(setNumbers.s), math.floor(0.75*maxx), math.floor(0.8*maxy));
+		if (not numberToChange) or not (numberToChange == "p") then
+			love.graphics.print("p: " .. tostring(setNumbers.p), 0, math.floor(0.8*maxy));
+		else
+			love.graphics.print("p: _", 0, math.floor(0.8*maxy));
+		end
+		if (not numberToChange) or not (numberToChange == "q") then
+			love.graphics.print("q: " .. tostring(setNumbers.q), math.floor(0.25*maxx), math.floor(0.8*maxy));
+		else
+			love.graphics.print("q: _", math.floor(0.25*maxx), math.floor(0.8*maxy));
+		end
+		if (not numberToChange) or not (numberToChange == "r") then
+			love.graphics.print("r: " .. tostring(setNumbers.r), math.floor(0.5*maxx), math.floor(0.8*maxy));
+		else
+			love.graphics.print("r: _", math.floor(0.5*maxx), math.floor(0.8*maxy));
+		end
+		if (not numberToChange) or not (numberToChange == "s") then
+			love.graphics.print("s: " .. tostring(setNumbers.s), math.floor(0.75*maxx), math.floor(0.8*maxy));
+		else
+			love.graphics.print("s: _", math.floor(0.75*maxx), math.floor(0.8*maxy));
+		end
 	elseif mode == "egg" then
 		love.graphics.setColor(0,0,0);
 		love.graphics.rectangle("fill",0,0,maxx,maxy);
